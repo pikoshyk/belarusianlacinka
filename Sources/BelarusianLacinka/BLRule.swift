@@ -94,6 +94,7 @@ struct BLRule {
     
     func apply(text: String, direction: BLDirection, version: BLVersion, orthograpy: BLOrthography) -> String
     {
+
         if (self.directions.count > 0 && self.directions.contains(direction) == false) ||
             (self.versions.count > 0 && self.versions.contains(version) == false) ||
             (self.orthographies.count > 0 && self.orthographies.contains(orthograpy) == false) {

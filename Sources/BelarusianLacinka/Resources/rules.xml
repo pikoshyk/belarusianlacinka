@@ -135,8 +135,8 @@
         <renderer>
             <name>ReplaceByPattern</name>
             <search>
-                <forth>([^бвгзклмнпсфхцБВГЗКЛМНПСФХЦ]{1})([[pair]])</forth>
-                <back>([^bcdfghklmnpsrtzvBSDFGHKLMNPSRTZV]{1})([[pair]])</back>
+                <forth>(^|[^бвгзклмнпсфхцБВГЗКЛМНПСФХЦ]{1})([[pair]])</forth>
+                <back>(^|[^bcdfghklmnpsrtzvBSDFGHKLMNPSRTZV]{1})([[pair]])</back>
             </search>
             <replace>$1[[pair]]</replace>
         </renderer>
@@ -257,7 +257,7 @@
         <renderer>
             <name>SimpleReplace</name>
             <search>
-                <forth>[[pair]]ь</forth>
+                <forth>[[pair]][ьЬ]</forth>
                 <back>[[pair]]</back>
             </search>
             <replace>
@@ -662,5 +662,16 @@
         <versions>
             <traditional>true</traditional>
         </versions>
+    </rule>
+    <rule name="remove_miakki_znak">
+        <sort>100</sort>
+        <renderer>
+            <name>ReplaceByPattern</name>
+            <search>[Ьь]+</search>
+            <replace></replace>
+        </renderer>
+        <directions>
+            <forth>true</forth>
+        </directions>
     </rule>
 </rules>

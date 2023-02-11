@@ -95,6 +95,7 @@ extension BLRulesParser: XMLParserDelegate {
         } else if elementName == "pair" {
             self.currentPair = BLRulePair(cyrillic: "", latin: "", versions: [], orthographies: [], directions: [])
         }
+
         self.elementsOrder.append(elementName)
     }
 
@@ -194,6 +195,41 @@ extension BLRulesParser: XMLParserDelegate {
     }
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        
+        if self.elementsOrder.count > 2 && self.elementsOrder.reversed()[2] == "renderer" {
+            if self.elementsOrder.count > 1 && self.elementsOrder.reversed()[1] == "search" {
+                for direction in [BLDirection.toCyrillic, BLDirection.toLacin] {
+                    if direction.rawValue == elementName {
+                        var text = ""
+                        if let rule = self.currentRule {
+                            text = rule.renderer.search[direction] ?? ""
+                        }
+                        self.currentRule?.renderer.search[direction] = text
+                    }
+                }
+            } else if self.elementsOrder.count > 1 && self.elementsOrder.reversed()[1] == "replace" {
+                for direction in [BLDirection.toCyrillic, BLDirection.toLacin] {
+                    if direction.rawValue == elementName {
+                        var text = ""
+                        if let rule = self.currentRule {
+                            text = rule.renderer.replace[direction] ?? ""
+                        }
+                        self.currentRule?.renderer.replace[direction] = text
+                    }
+                }
+            }
+        } else if self.elementsOrder.count > 1 && self.elementsOrder.reversed()[1] == "renderer" {
+            if self.elementsOrder.count > 0 && self.elementsOrder.reversed()[0] == "search" {
+                if self.currentRule?.renderer.search.count == 0 && self.currentRule?.renderer.defaultSearch == nil {
+                    self.currentRule?.renderer.defaultSearch = ""
+                }
+            } else if self.elementsOrder.count > 0 && self.elementsOrder.reversed()[0] == "replace" {
+                if self.currentRule?.renderer.replace.count == 0 && self.currentRule?.renderer.defaultReplace == nil {
+                    self.currentRule?.renderer.defaultReplace = ""
+                }
+            }
+        }
+
         for i in (0..<self.elementsOrder.count).reversed() {
             let currentElement = self.elementsOrder[i]
             self.elementsOrder.remove(at: i)
