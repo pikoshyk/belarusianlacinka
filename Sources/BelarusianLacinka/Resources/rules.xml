@@ -255,9 +255,9 @@
     <rule name="palatalization">
         <sort>70</sort>
         <renderer>
-            <name>SimpleReplace</name>
+            <name>ReplaceByPattern</name>
             <search>
-                <forth>[[pair]][ьЬ]</forth>
+                <forth>[[pair]][ьЬ]{1}</forth>
                 <back>[[pair]]</back>
             </search>
             <replace>
